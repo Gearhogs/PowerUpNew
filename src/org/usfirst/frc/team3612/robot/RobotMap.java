@@ -23,16 +23,19 @@ public class RobotMap {
 	public static int rightDrivePortB = 3;
 	
 	//Lift Ports
-	public static int leftLiftC = 5;
 	public static int rightLiftD = 4;
+	public static int leftLiftC = 5;
 	
 	//Intake Ports
 	public static int leftIntakeC = 6;
 	public static int rightIntakeD = 7;
-	public static int intakeDeploy= 9;
+	
 	
 	//Climb Port
 	public static int climbPort = 8;
+	
+	//Intake Deploy
+	public static int intakeDeploy= 9;
 	
 	//Encoders
 	public static int leftEncoderPortA = 0;

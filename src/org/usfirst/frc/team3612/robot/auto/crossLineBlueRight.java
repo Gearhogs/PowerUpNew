@@ -1,7 +1,8 @@
 package org.usfirst.frc.team3612.robot.auto;
 
-import edu.wpi.first.wpilibj.command.CommandGroup;
 import org.usfirst.frc.team3612.robot.commands.DriveForward;
+
+import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */

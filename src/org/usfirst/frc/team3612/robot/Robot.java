@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
 	public static Intake intake;
 	public static Lift lift;
 	public static Climb climb;
-	public static CustomPDP PDP;
+	public static PowerDistributionPanel PDP;
 	public static Pneumatics pneumatics;
 	public static OI oi;
 

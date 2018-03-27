@@ -13,9 +13,8 @@ private double setpoint;
         requires(Robot.lift);
         
         this.setpoint=setpoint;
-        
     }
-
+    
     // Called once when the command executes
     protected void initialize() {
         Robot.lift.runPID(setpoint);

@@ -23,21 +23,10 @@ public class Lift extends Subsystem {
 	public Lift() {
 		
 		rightMotor.follow(leftMotor);
-		rightMotor.setInverted(true);
-		
 		leftMotor.setSensorPhase(true);
 		
-		leftMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
+		leftMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);	
 		
-		leftMotor.configNominalOutputForward(0, Constants.kTimeoutMs);
-		leftMotor.configNominalOutputReverse(0, Constants.kTimeoutMs);
-		leftMotor.configPeakOutputForward(.5, Constants.kTimeoutMs);
-		leftMotor.configPeakOutputReverse(-.5, Constants.kTimeoutMs);		
-		
-		leftMotor.config_kF(Constants.kPIDLoopIdx, 0, Constants.kTimeoutMs);
-		leftMotor.config_kP(Constants.kPIDLoopIdx, 0.113333, Constants.kTimeoutMs);
-		leftMotor.config_kI(Constants.kPIDLoopIdx, 0, Constants.kTimeoutMs);
-		leftMotor.config_kD(Constants.kPIDLoopIdx, 0, Constants.kTimeoutMs);
 	}
 	
 	public void runMotor(double speed) {
@@ -58,8 +47,10 @@ public class Lift extends Subsystem {
 		SmartDashboard.putData("RightLift", rightMotor);
 		SmartDashboard.putNumber("LiftPos: ", getPosition());
 	}
-    public void initDefaultCommand() {
-    	setDefaultCommand(new JoystickRunLift());
-    }
-}
 
+	@Override
+	protected void initDefaultCommand() {
+		// TODO Auto-generated method stub
+		
+	}
+}

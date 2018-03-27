@@ -4,6 +4,7 @@ import org.usfirst.frc.team3612.robot.RobotMap;
 import org.usfirst.frc.team3612.robot.commands.runIntake;
 import org.usfirst.frc.team3612.robot.util.Constants;
 
+import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
@@ -11,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,6 +29,8 @@ public class Intake extends Subsystem {
 	DoubleSolenoid rightCylinder = new DoubleSolenoid(RobotMap.rightCylinderFwd, RobotMap.rightCylinderRev);
 	private int state = -1;
 	
+	ErrorCode limitSwitchError;
+	
 	public void config() {
 		rightMotor.setName("Intake", "RightMotor");
 		leftMotor.setName("Intake", "LeftMotor");
@@ -39,12 +43,8 @@ public class Intake extends Subsystem {
 		leftMotor.configPeakOutputForward(1, Constants.kTimeoutMs);
 		leftMotor.configPeakOutputReverse(-1, Constants.kTimeoutMs);		
 		
-		leftMotor.config_kF(Constants.kPIDLoopIdx, 0, Constants.kTimeoutMs);
-		leftMotor.config_kP(Constants.kPIDLoopIdx, 0.113333, Constants.kTimeoutMs);
-		leftMotor.config_kI(Constants.kPIDLoopIdx, 0, Constants.kTimeoutMs);
-		leftMotor.config_kD(Constants.kPIDLoopIdx, 0, Constants.kTimeoutMs);
+		limitSwitchError = leftMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector , LimitSwitchNormal.NormallyOpen, 1000);
 		
-		leftMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed, 0);
 	}
 	
 	public void runMotor(double speed) {
@@ -73,10 +73,12 @@ public class Intake extends Subsystem {
 	public void setState(int state) {
 		this.state = state;
 	}
+	
 	public boolean getLimitSwitch() {
-		return leftMotor.getSensorCollection().isFwdLimitSwitchClosed();
-		
+		return leftMotor.getSensorCollection().isRevLimitSwitchClosed();
 	}
+	
+	
 	public void runDeployPID(double setpoint) {
 		leftMotor.set(ControlMode.Position, setpoint);
 	}
@@ -84,6 +86,7 @@ public class Intake extends Subsystem {
 	public double getPosition() {
 		return leftMotor.getSelectedSensorPosition(0);
 	}
+	
 	public String getStateName() {
 		String returnState = "Null";
 		
@@ -117,8 +120,9 @@ public class Intake extends Subsystem {
 		SmartDashboard.putData("leftIntakeMotor", leftMotor);
 		SmartDashboard.putBoolean("LeftCylinder", leftCylinder.get() == DoubleSolenoid.Value.kForward);
 		SmartDashboard.putBoolean("RightCylinder", rightCylinder.get() == DoubleSolenoid.Value.kForward);
-		SmartDashboard.putBoolean("CubePresent", getLimitSwitch());
+	  //SmartDashboard.putBoolean("CubePresent", getLimitSwitch());
 		SmartDashboard.putString("Intake State", getStateName());
 		SmartDashboard.putData("intakeDeploy", intakeDeploy);
+		SmartDashboard.putString("Limit Error", limitSwitchError.name());
 	}
 }
